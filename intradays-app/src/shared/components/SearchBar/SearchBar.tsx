@@ -8,7 +8,8 @@ interface ISearchBar {
 const SearchBar: React.FC<ISearchBar> = ({ symbol, handleChange }) => {
   return (
     <>
-      <p>Search bar here</p>
+      <input type="text" value={symbol} onChange={handleChange} />
+      <input type="submit" value="Submit" />
     </>
   );
 }

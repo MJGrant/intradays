@@ -11,12 +11,12 @@ const Form: React.FC<IForm> = ({}) => {
 
   const inputStockSymbol = (event: any) => {
     setStockSymbol(event.target.value);
-    console.log("Setting user's stock symbol input to: " + event.target.value);
+    console.log("User's form input so far: " + event.target.value);
   }
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log("Submitted form");
+    console.log("Submitted form with this input: " + stockSymbol);
   }
 
   return (

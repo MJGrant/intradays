@@ -7,7 +7,7 @@ export const callAPI = (symbol: string) => {
         }
     };
   
-    return Axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&apikey=${config.params.api_key}`)
+    return Axios.get(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol=${symbol}&interval=5min&apikey=${config.params.api_key}`)
 }
 
 export const getTradingData = async (symbol: string): Promise<[]> => {

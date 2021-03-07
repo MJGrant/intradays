@@ -39,7 +39,7 @@ const Form: React.FC<IForm> = ({ }) => {
         <SearchBar symbol={stockSymbol} handleChange={inputStockSymbol} />
         {
           data.map((d: any) => (
-            <p>
+            <p key={d.timestamp}>
               {d.timestamp}
             </p>
           ))
@@ -61,7 +61,7 @@ const Form: React.FC<IForm> = ({ }) => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="timestamp" />
-            <YAxis tickFormatter={renderDollarSign}/>
+            <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="Friday 03-05-2021" stroke="#8884d8" />

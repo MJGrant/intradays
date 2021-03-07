@@ -29,6 +29,10 @@ const Form: React.FC<IForm> = ({ }) => {
     console.log(processedData);
   }
 
+  const renderDollarSign = (label: string) => {
+    return `$${label}`;
+  }
+
   return (
     <div>
       <form noValidate onSubmit={handleSubmit}>
@@ -57,7 +61,7 @@ const Form: React.FC<IForm> = ({ }) => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="timestamp" />
-            <YAxis />
+            <YAxis tickFormatter={renderDollarSign}/>
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="Friday 03-05-2021" stroke="#8884d8" />

@@ -16,17 +16,17 @@ export const processTradingHistory = (data: []) => {
   create an object with a snapshot of each day's value for that timestamp as a key/value pair 
   */
   processedData = [
-      {'timestamp': '09:00',
-      'Friday 2021-03-05': '$145.00',   // most recent trading day
-      'Thursday 2021-03-04': '$122.00'    // second-most recent trading day (and so on)
+      {timestamp: '09:00',
+      'Friday 03-05-2021': 145.00,   // most recent trading day
+      'Thursday 03-04-2021': 122.00    // second-most recent trading day (and so on)
     },
-    {'timestamp': '09:05',
-      'Friday 2021-03-05': '$130.00',
-      'Thursday 2021-03-04': '$121.00'
+    {timestamp: '09:05',
+      'Friday 03-05-2021': 130.00,
+      'Thursday 03-04-2021': 121.00
     },
-    {'timestamp': '09:10',
-      'Friday 2021-03-05': '$132.00',
-      'Thursday 2021-03-04': '$160.00'
+    {timestamp: '09:10',
+      'Friday 03-05-2021': 132.00,
+      'Thursday 03-04-2021': 160.00
     },
   ];
   return processedData;

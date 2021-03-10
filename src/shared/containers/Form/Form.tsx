@@ -28,7 +28,7 @@ const Form: React.FC<IForm> = ({ }) => {
     // is using mock data 
     let processedData = await processTradingHistory([]);
     setData(processedData);
-    console.log(processedData);
+    //console.log(processedData);
   }
 
   const renderDollarSign = (label: string) => {
@@ -39,6 +39,7 @@ const Form: React.FC<IForm> = ({ }) => {
     <div>
       <form noValidate onSubmit={handleSubmit}>
         <SearchBar symbol={stockSymbol} handleChange={inputStockSymbol} />
+        {/* 
         {
           data && data.length > 0 && data.map((d: any) => (
             <p key={d.timestamp}>
@@ -46,6 +47,7 @@ const Form: React.FC<IForm> = ({ }) => {
             </p>
           ))
         }
+      */}
       </form>
 
       <div style={{ height: 500 }}>
@@ -66,9 +68,10 @@ const Form: React.FC<IForm> = ({ }) => {
             <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="2021-03-05" stroke="#8884d8" />
-            <Line type="monotone" dataKey="2021-03-04" stroke="#82ca9d" />
-            <Line type="monotone" dataKey="2021-03-06" stroke="#82caff" />
+            <Line type="monotone" dataKey="2021-03-04" stroke="#8884d8" />
+            <Line type="monotone" dataKey="2021-03-03" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="2021-03-02" stroke="#82caff" />
+            <Line type="monotone" dataKey="2021-03-01" stroke="#ff66ff" />
           </LineChart>
         </ResponsiveContainer>
       </div>

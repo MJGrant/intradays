@@ -3,6 +3,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import { getTradingData } from '../../../services/api';
 import { processTradingHistory } from '../../../services/utils';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { format } from 'date-fns';
 
 interface IForm {
 
@@ -31,6 +32,25 @@ const Form: React.FC<IForm> = ({ }) => {
     //console.log(processedData);
   }
 
+  const formatTimestamp = (time: string) => {
+    // ex: 09:55:00 to 9:55am
+    // ex: 18:15:00 to 6:15pm
+    if (time) {
+      const [hour, minute] = time.split(':');
+      let formattedHour = 0;
+      let formattedSuffix = 'pm';
+      if (hour) {
+        formattedHour = +hour % 12 || 12;
+        if (formattedHour < 12 || hour === '24') {
+          formattedSuffix = 'am';
+        }
+      }
+      return `${formattedHour}:${minute}${formattedSuffix}`;
+    } else {
+      return time;
+    }
+  }
+
   const renderDollarSign = (label: string) => {
     return `$${label}`;
   }
@@ -50,31 +70,33 @@ const Form: React.FC<IForm> = ({ }) => {
       */}
       </form>
 
-      <div style={{ height: 500 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="timestamp" />
-            <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="2021-03-04" stroke="#8884d8" />
-            <Line type="monotone" dataKey="2021-03-03" stroke="#82ca9d" />
-            <Line type="monotone" dataKey="2021-03-02" stroke="#82caff" />
-            <Line type="monotone" dataKey="2021-03-01" stroke="#ff66ff" />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      {data.length > 0 &&
+        <div style={{ height: 500 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              width={500}
+              height={300}
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="timestamp" tickFormatter={formatTimestamp} />
+              <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="2021-03-04" stroke="#8884d8" />
+              <Line type="monotone" dataKey="2021-03-03" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="2021-03-02" stroke="#82caff" />
+              <Line type="monotone" dataKey="2021-03-01" stroke="#ff66ff" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      }
 
     </div>
   )

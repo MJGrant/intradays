@@ -12,7 +12,7 @@ interface IForm {
 const Form: React.FC<IForm> = ({ }) => {
 
   const [stockSymbol, setStockSymbol] = useState('gme');
-  const [data, setData] = useState([] as any);
+  const [data, setData] = useState({} as any);
 
   const inputStockSymbol = (event: any) => {
     setStockSymbol(event.target.value);
@@ -51,6 +51,17 @@ const Form: React.FC<IForm> = ({ }) => {
     }
   }
 
+  const renderDot = (props: any) => {
+    console.log(props);
+    const { cx, cy, stroke, payload, dataKey, value } = props;
+
+    const showDot = (value === data.lowestPoints.get(dataKey));
+
+    return showDot ? (
+      <circle cx={cx} cy={cy} fill={stroke} r="3" />
+    ) : <></>;
+  }
+
   const renderDollarSign = (label: string) => {
     return `$${label}`;
   }
@@ -70,13 +81,13 @@ const Form: React.FC<IForm> = ({ }) => {
       */}
       </form>
 
-      {data.length > 0 &&
+      {data?.lineData?.length > 0 &&
         <div style={{ height: 500 }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               width={500}
               height={300}
-              data={data}
+              data={data.lineData}
               margin={{
                 top: 5,
                 right: 30,
@@ -89,10 +100,10 @@ const Form: React.FC<IForm> = ({ }) => {
               <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="2021-03-04" stroke="#8884d8" />
-              <Line type="monotone" dataKey="2021-03-03" stroke="#82ca9d" />
-              <Line type="monotone" dataKey="2021-03-02" stroke="#82caff" />
-              <Line type="monotone" dataKey="2021-03-01" stroke="#ff66ff" />
+              <Line type="monotone" dataKey="2021-03-04" stroke="#8884d8" dot={renderDot}/>
+              <Line type="monotone" dataKey="2021-03-03" stroke="#82ca9d" dot={renderDot}/>
+              <Line type="monotone" dataKey="2021-03-02" stroke="#82caff" dot={renderDot}/>
+              <Line type="monotone" dataKey="2021-03-01" stroke="#ff66ff" dot={renderDot}/>
             </LineChart>
           </ResponsiveContainer>
         </div>

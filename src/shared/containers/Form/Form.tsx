@@ -13,6 +13,7 @@ const Form: React.FC<IForm> = ({ }) => {
 
   const [stockSymbol, setStockSymbol] = useState('gme');
   const [data, setData] = useState({} as any);
+  const [lowestPoints, setLowestPoints] = useState([] as any);
 
   const inputStockSymbol = (event: any) => {
     setStockSymbol(event.target.value);
@@ -29,6 +30,10 @@ const Form: React.FC<IForm> = ({ }) => {
     // is using mock data 
     let processedData = await processTradingHistory([]);
     setData(processedData);
+
+    let lowestPointsArr = Array.from(processedData.lowestPoints);
+    console.log(lowestPointsArr);
+    setLowestPoints(lowestPointsArr);
     //console.log(processedData);
   }
 
@@ -52,7 +57,6 @@ const Form: React.FC<IForm> = ({ }) => {
   }
 
   const renderDot = (props: any) => {
-    console.log(props);
     const { cx, cy, stroke, payload, dataKey, value } = props;
 
     const showDot = (value === data.lowestPoints.get(dataKey));
@@ -70,15 +74,20 @@ const Form: React.FC<IForm> = ({ }) => {
     <div>
       <form noValidate onSubmit={handleSubmit}>
         <SearchBar symbol={stockSymbol} handleChange={inputStockSymbol} />
-        {/* 
         {
-          data && data.length > 0 && data.map((d: any) => (
-            <p key={d.timestamp}>
-              {d.timestamp}
+          data.lowestPoints && Array.from(data.lowestPoints, ([key, value]) => {
+            return <p key={value}>
+              {key} : {value}
+            </p>
+          })
+        }
+        {/*
+          data.lowestPoints && data.lowestPoints.length > 0 && data.lowestPoints.map((d: any) => (
+            <p key={d}>
+              {d}
             </p>
           ))
-        }
-      */}
+          */}
       </form>
 
       {data?.lineData?.length > 0 &&

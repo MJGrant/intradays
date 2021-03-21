@@ -1,4 +1,5 @@
 import React from 'react'
+import { Input, Button } from '@toyota-research-institute/lakefront';
 
 interface ISearchBar {
   symbol: string;
@@ -8,8 +9,8 @@ interface ISearchBar {
 const SearchBar: React.FC<ISearchBar> = ({ symbol, handleChange }) => {
   return (
     <>
-      <input type="text" value={symbol} onChange={handleChange} />
-      <input type="submit" value="Submit" />
+      <Input type="text" value={symbol} onChange={handleChange} />
+      <Button color="primary">Submit</Button>
     </>
   );
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import Form from './shared/containers/Form/Form';
 
 import './App.css';
+import { ThemeProvider } from '@emotion/react';
 
 function App() {
   return (

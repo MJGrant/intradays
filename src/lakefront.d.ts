@@ -1,0 +1,1 @@
+declare module '@toyota-research-institute/lakefront';

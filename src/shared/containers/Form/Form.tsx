@@ -93,6 +93,7 @@ const Form: React.FC<IForm> = ({ }) => {
       </form>
 
       {data?.lineData?.length > 0 &&
+        lowestPoints.length > 0 && 
         <div style={{ height: 500 }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart

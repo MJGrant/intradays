@@ -9,8 +9,8 @@ interface ISearchBar {
 const SearchBar: React.FC<ISearchBar> = ({ symbol, handleChange }) => {
   return (
     <>
-      <Input type="text" value={symbol} onChange={handleChange} />
-      <Button color="primary">Submit</Button>
+      <Input type="text" value={symbol} onChange={handleChange} className="space-around no-left-margin"/>
+      <Button color="primary" className="space-around">Submit</Button>
       <br/>
       <br/>
     </>

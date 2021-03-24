@@ -23,18 +23,19 @@ const Form: React.FC<IForm> = ({ }) => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     console.log("Submitted form with this input: " + stockSymbol);
-    // commented out API call for now while I work with mock data 
-    // let rawData = await getTradingData(stockSymbol);
+
+    // make API call, get trading data for this symbol 
+    let rawData = await getTradingData(stockSymbol);
     // console.log(rawData);
-    // we don't pass anything to processTradingData yet, because currently it
-    // is using mock data 
-    let processedData = await processTradingHistory([]);
+
+    // format the data that came from the API call
+    let processedData = await processTradingHistory(rawData);
     setData(processedData);
 
     let lowestPointsArr = Array.from(processedData.lowestPoints);
+
     console.log(lowestPointsArr);
     setLowestPoints(lowestPointsArr);
-    //console.log(processedData);
   }
 
   const formatTimestamp = (time: string) => {
@@ -74,6 +75,7 @@ const Form: React.FC<IForm> = ({ }) => {
     <div>
       <form noValidate onSubmit={handleSubmit}>
         <SearchBar symbol={stockSymbol} handleChange={inputStockSymbol} />
+        {/*
         {
           data.lowestPoints && Array.from(data.lowestPoints, ([key, value]) => {
             return <p key={value}>
@@ -109,10 +111,11 @@ const Form: React.FC<IForm> = ({ }) => {
               <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="2021-03-04" stroke="#8884d8" dot={renderDot}/>
-              <Line type="monotone" dataKey="2021-03-03" stroke="#82ca9d" dot={renderDot}/>
-              <Line type="monotone" dataKey="2021-03-02" stroke="#82caff" dot={renderDot}/>
-              <Line type="monotone" dataKey="2021-03-01" stroke="#ff66ff" dot={renderDot}/>
+              <Line type="monotone" dataKey={lowestPoints[0][0]} stroke="#8884d8" dot={renderDot}/>
+              <Line type="monotone" dataKey={lowestPoints[1][0]} stroke="#82ca9d" dot={renderDot}/>
+              <Line type="monotone" dataKey={lowestPoints[2][0]} stroke="#82caff" dot={renderDot}/>
+              <Line type="monotone" dataKey={lowestPoints[3][0]} stroke="#ff66ff" dot={renderDot}/>
+              <Line type="monotone" dataKey={lowestPoints[4][0]} stroke="#aabbcc" dot={renderDot}/>
             </LineChart>
           </ResponsiveContainer>
         </div>

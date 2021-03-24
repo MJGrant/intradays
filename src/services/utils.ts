@@ -65,7 +65,7 @@ export const processTradingHistory = async (data: []) => {
     resolveCSVPromise = resolve;
   });
 
-  parse(testData, {columns: true}, 
+  parse(data.toString(), {columns: true}, 
     function(err, output) {
 
       const lineData = new Map();

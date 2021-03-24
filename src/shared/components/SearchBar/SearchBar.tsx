@@ -11,6 +11,8 @@ const SearchBar: React.FC<ISearchBar> = ({ symbol, handleChange }) => {
     <>
       <Input type="text" value={symbol} onChange={handleChange} />
       <Button color="primary">Submit</Button>
+      <br/>
+      <br/>
     </>
   );
 }

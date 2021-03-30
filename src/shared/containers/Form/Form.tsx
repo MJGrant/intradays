@@ -3,17 +3,37 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import { getTradingData } from '../../../services/api';
 import { processTradingHistory } from '../../../services/utils';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { format } from 'date-fns';
 
-interface IForm {
-
-}
-
-const Form: React.FC<IForm> = ({ }) => {
+const Form: React.FC = () => {
 
   const [stockSymbol, setStockSymbol] = useState('gme');
   const [data, setData] = useState({} as any);
   const [lowestPoints, setLowestPoints] = useState([] as any);
+
+  const strokeColors = [
+    "#000000",
+    "#140503",
+    "#290b07",
+    "#3d100a",
+    "#52150e",
+    "#661b12",
+    "#7a2015",
+    "#8f2519",
+    "#a32a1c",
+    "#b83020",
+    "#cc3523",
+    "#d14939",
+    "#d65d4f",
+    "#e0867b",
+    "#db7265",
+    "#e69a91",
+    "#ebaea7",
+    "#f0c2bd",
+    "#f5d7d3",
+    "#f5d7d3",
+    "#f5d7d3",
+    "#f5d7d3"
+  ];
 
   const inputStockSymbol = (event: any) => {
     setStockSymbol(event.target.value);
@@ -58,7 +78,7 @@ const Form: React.FC<IForm> = ({ }) => {
   }
 
   const renderDot = (props: any) => {
-    const { cx, cy, stroke, payload, dataKey, value } = props;
+    const { cx, cy, stroke, dataKey, value } = props;
 
     const showDot = (value === data.lowestPoints.get(dataKey));
 
@@ -112,11 +132,10 @@ const Form: React.FC<IForm> = ({ }) => {
               <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey={lowestPoints[0][0]} stroke="#8884d8" dot={renderDot}/>
-              <Line type="monotone" dataKey={lowestPoints[1][0]} stroke="#82ca9d" dot={renderDot}/>
-              <Line type="monotone" dataKey={lowestPoints[2][0]} stroke="#82caff" dot={renderDot}/>
-              <Line type="monotone" dataKey={lowestPoints[3][0]} stroke="#ff66ff" dot={renderDot}/>
-              <Line type="monotone" dataKey={lowestPoints[4][0]} stroke="#aabbcc" dot={renderDot}/>
+              {lowestPoints.map((element: any, index: number) => {
+                return <Line key={'key'+index} type="monotone" dataKey={element[0]} stroke={strokeColors[index]} dot={renderDot}/>
+              })}
+
             </LineChart>
           </ResponsiveContainer>
         </div>

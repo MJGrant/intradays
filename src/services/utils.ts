@@ -1,8 +1,4 @@
 import parse from 'csv-parse';
-import { stringify } from 'node:querystring';
-
-import { testData } from '../testdata/testData';
-
 
 /* DATA MODEL EXAMPLE: 
     const data = [

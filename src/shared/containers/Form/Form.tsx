@@ -6,7 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 const Form: React.FC = () => {
 
-  const [stockSymbol, setStockSymbol] = useState('gme');
+  const [stockSymbol, setStockSymbol] = useState('GME');
   const [data, setData] = useState({} as any);
   const [lowestPoints, setLowestPoints] = useState([] as any);
 
@@ -36,7 +36,7 @@ const Form: React.FC = () => {
   ];
 
   const inputStockSymbol = (event: any) => {
-    setStockSymbol(event.target.value);
+    setStockSymbol(event.target.value.toUpperCase());
     console.log("User's form input so far: " + event.target.value);
   }
 

@@ -54,6 +54,11 @@ interface IParsed {
   [key: string]: number | string | undefined;
 }
 
+function moneyRound(num: number) {
+  // rounds up and to two decimal places
+  return Math.ceil(num * 100) / 100;
+}
+
 export const processTradingHistory = async (data: []) => {
 
   let resolveCSVPromise = (csv: any) => {};
@@ -71,16 +76,16 @@ export const processTradingHistory = async (data: []) => {
         let parsedObject: IParsed = {};
         const [date, timestamp] = e.time.split(' ');
         parsedObject.timestamp = timestamp;
-        parsedObject[date] = +e.close;
+        parsedObject[date] = moneyRound(+e.close);
 
         const currentTimestamp = lineData.get(timestamp);
-        lineData.set(timestamp, {...currentTimestamp, [date]: +e.close }); // combine new entry into current fields
+        lineData.set(timestamp, {...currentTimestamp, [date]: moneyRound(+e.close) }); // combine new entry into current fields
 
         // update "lowest point" value
         if (lowestPoints.get(date) == null) {
-          lowestPoints.set(date, +e.close);
+          lowestPoints.set(date, moneyRound(+e.close));
         } else if (+e.close < lowestPoints.get(date)) {
-          lowestPoints.set(date, +e.close);
+          lowestPoints.set(date, moneyRound(+e.close));
         } 
       });
     

@@ -7,6 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 const Form: React.FC = () => {
 
   const [stockSymbol, setStockSymbol] = useState('GME');
+  const [inputErr, setInputErr] = useState('');
   const [data, setData] = useState({} as any);
   const [lowestPoints, setLowestPoints] = useState([] as any);
 
@@ -44,18 +45,23 @@ const Form: React.FC = () => {
     event.preventDefault();
     console.log("Submitted form with this input: " + stockSymbol);
 
-    // make API call, get trading data for this symbol 
-    let rawData = await getTradingData(stockSymbol);
-    // console.log(rawData);
+    if (stockSymbol.length === 0) {
+      setInputErr("Please input a stock symbol");
+    } else {
+      setInputErr("");
+      let rawData = await getTradingData(stockSymbol);
 
-    // format the data that came from the API call
-    let processedData = await processTradingHistory(rawData);
-    setData(processedData);
+      // format the data that came from the API call
+      let processedData = await processTradingHistory(rawData);
+      setData(processedData);
 
-    let lowestPointsArr = Array.from(processedData.lowestPoints);
+      let lowestPointsArr = Array.from(processedData.lowestPoints);
 
-    console.log(lowestPointsArr);
-    setLowestPoints(lowestPointsArr);
+      console.log(lowestPointsArr);
+      setLowestPoints(lowestPointsArr);
+    }
+
+    
   }
 
   const formatTimestamp = (time: string) => {
@@ -94,7 +100,7 @@ const Form: React.FC = () => {
   return (
     <div>
       <form noValidate onSubmit={handleSubmit}>
-        <SearchBar symbol={stockSymbol} handleChange={inputStockSymbol} />
+        <SearchBar symbol={stockSymbol} handleChange={inputStockSymbol} error={inputErr} />
         {/*
         {
           data.lowestPoints && Array.from(data.lowestPoints, ([key, value]) => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { getTradingData } from '../../../services/api';
 import { processTradingHistory } from '../../../services/utils';
+import { Checkbox } from '@toyota-research-institute/lakefront';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const Form: React.FC = () => {
@@ -10,6 +11,8 @@ const Form: React.FC = () => {
   const [inputErr, setInputErr] = useState('');
   const [data, setData] = useState({} as any);
   const [lowestPoints, setLowestPoints] = useState([] as any);
+  const [includePreMarket, setIncludePreMarket] = useState(true);
+  const [includeAfterHours, setIncludeAfterHours] = useState(true);
 
   const strokeColors = [
     "#000000",
@@ -39,6 +42,14 @@ const Form: React.FC = () => {
   const inputStockSymbol = (event: any) => {
     setStockSymbol(event.target.value.toUpperCase());
     console.log("User's form input so far: " + event.target.value);
+  }
+
+  const toggleIncludePreMarket = (event: any) => {
+    setIncludePreMarket(prevProps => !prevProps);
+  }
+
+  const toggleIncludeAfterHours = (event: any) => {
+    setIncludeAfterHours(prevProps => !prevProps);
   }
 
   const handleSubmit = async (event: any) => {
@@ -144,6 +155,8 @@ const Form: React.FC = () => {
 
             </LineChart>
           </ResponsiveContainer>
+          <Checkbox label="Include pre-market" checked={includePreMarket} onChange={toggleIncludePreMarket}/>
+          <Checkbox label="Include after-hours" checked={includeAfterHours} onChange={toggleIncludeAfterHours}/>
         </div>
       }
 

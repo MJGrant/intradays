@@ -11,8 +11,11 @@ const Form: React.FC = () => {
   const [inputErr, setInputErr] = useState('');
   const [data, setData] = useState({} as any);
   const [lowestPoints, setLowestPoints] = useState([] as any);
+
+  const [includeLowestPoints, setIncludeLowestPoints] = useState(true);
   const [includePreMarket, setIncludePreMarket] = useState(true);
   const [includeAfterHours, setIncludeAfterHours] = useState(true);
+
   const filteredData = useMemo(() => {
     const filtered = data?.lineData?.filter((line: any) => {
       
@@ -75,6 +78,10 @@ const Form: React.FC = () => {
 
   const toggleIncludeAfterHours = (event: any) => {
     setIncludeAfterHours(prevProps => !prevProps);
+  }
+
+  const toggleIncludeLowestPoints = (event: any) => {
+    setIncludeLowestPoints(prevProps => !prevProps);
   }
 
   const handleSubmit = async (event: any) => {
@@ -181,13 +188,15 @@ const Form: React.FC = () => {
               <Tooltip />
               <Legend />
               {lowestPoints.map((element: any, index: number) => {
-                return <Line key={'key'+index} type="monotone" dataKey={element[0]} stroke={strokeColors[index]} dot={renderDot}/>
+                return <Line key={'key'+index} type="monotone" dataKey={element[0]} stroke={strokeColors[index]} dot={includeLowestPoints ? renderDot : false}/>
               })}
 
             </LineChart>
           </ResponsiveContainer>
           <Checkbox label="Include pre-market" checked={includePreMarket} onChange={toggleIncludePreMarket}/>
           <Checkbox label="Include after-hours" checked={includeAfterHours} onChange={toggleIncludeAfterHours}/>
+
+          <Checkbox label="Show lowest price of the day" checked={includeLowestPoints} onChange={toggleIncludeLowestPoints}/>
         </div>
       }
 

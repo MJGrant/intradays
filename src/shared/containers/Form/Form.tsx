@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { getTradingData } from '../../../services/api';
 import { processTradingHistory } from '../../../services/utils';
@@ -13,6 +13,31 @@ const Form: React.FC = () => {
   const [lowestPoints, setLowestPoints] = useState([] as any);
   const [includePreMarket, setIncludePreMarket] = useState(true);
   const [includeAfterHours, setIncludeAfterHours] = useState(true);
+  const filteredData = useMemo(() => {
+    const filtered = data?.lineData?.filter((line: any) => {
+      
+      // only return premarket if flag is true
+      if (includePreMarket) {
+        if (line.timestamp <= '08:30:00') {
+          return line;
+        }
+      }
+
+      // always return timestamps during main market hours
+      if (line.timestamp >= '08:30:00' && line.timestamp <= '16:00:00') {
+        return line;
+      }
+
+      // only include afterhours if flag is true
+      if (includeAfterHours) {
+        if (line.timestamp >= '16:00:00') {
+          return line;
+        }
+      }
+    });
+
+    return { data, ...{ lineData: filtered } };
+  }, [data, includePreMarket, includeAfterHours]);
 
   const strokeColors = [
     "#000000",
@@ -65,6 +90,7 @@ const Form: React.FC = () => {
       // format the data that came from the API call
       let processedData = await processTradingHistory(rawData);
       setData(processedData);
+      
 
       let lowestPointsArr = Array.from(processedData.lowestPoints);
 
@@ -80,14 +106,19 @@ const Form: React.FC = () => {
     // ex: 18:15:00 to 6:15pm
     if (time) {
       const [hour, minute] = time.split(':');
-      let formattedHour = 0;
+
+      //determine if this is am or pm
       let formattedSuffix = 'pm';
+      if (+hour <12 || +hour === 24) {
+        formattedSuffix = 'am';
+      }
+
+      // turn 24-hour time into 12, ex: "15:00:00" into "03:00"
+      let formattedHour = 0;
       if (hour) {
         formattedHour = +hour % 12 || 12;
-        if (formattedHour < 12 || hour === '24') {
-          formattedSuffix = 'am';
-        }
       }
+
       return `${formattedHour}:${minute}${formattedSuffix}`;
     } else {
       return time;
@@ -136,7 +167,7 @@ const Form: React.FC = () => {
             <LineChart
               width={500}
               height={300}
-              data={data.lineData}
+              data={filteredData.lineData}
               margin={{
                 top: 5,
                 right: 30,

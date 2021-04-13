@@ -86,7 +86,7 @@ export const processTradingHistory = async (data: []) => {
           lowestPoints.set(date, moneyRound(+e.close));
         } else if (+e.close < lowestPoints.get(date)) {
           lowestPoints.set(date, moneyRound(+e.close));
-        } 
+        }
       });
     
       // handle line data
@@ -96,9 +96,11 @@ export const processTradingHistory = async (data: []) => {
         return accumulator.concat(newEntry);
       }, []);
 
+      const sortedLineData = formattedLineData.sort((a: any, b: any) => (a.timestamp > b.timestamp) ? 1 : -1);
+
       const allData = {
         lowestPoints: lowestPoints,
-        lineData: formattedLineData,
+        lineData: sortedLineData,
       }
 
       console.log(allData);

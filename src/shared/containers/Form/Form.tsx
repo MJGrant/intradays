@@ -11,9 +11,13 @@ const Form: React.FC = () => {
   const [inputErr, setInputErr] = useState('');
   const [data, setData] = useState({} as any);
   const [loading, setLoading] = useState(false);
+  
   const [lowestPoints, setLowestPoints] = useState([] as any);
+  const [highestPoints, setHighestPoints] = useState([] as any);
 
   const [includeLowestPoints, setIncludeLowestPoints] = useState(true);
+  const [includeHighestPoints, setIncludeHighestPoints] = useState(true);
+
   const [includePreMarket, setIncludePreMarket] = useState(true);
   const [includeAfterHours, setIncludeAfterHours] = useState(true);
 
@@ -85,6 +89,10 @@ const Form: React.FC = () => {
     setIncludeLowestPoints(prevProps => !prevProps);
   }
 
+  const toggleIncludeHighestPoints = (event: any) => {
+    setIncludeHighestPoints(prevProps => !prevProps);
+  }
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     console.log("Submitted form with this input: " + stockSymbol);
@@ -102,11 +110,12 @@ const Form: React.FC = () => {
       let processedData = await processTradingHistory(rawData);
       setData(processedData);
       
-
       let lowestPointsArr = Array.from(processedData.lowestPoints);
+      let highestPointsArr = Array.from(processedData.highestPoints);
 
       console.log(lowestPointsArr);
       setLowestPoints(lowestPointsArr);
+      setHighestPoints(highestPointsArr);
     }
     
   }
@@ -138,11 +147,17 @@ const Form: React.FC = () => {
   const renderDot = (props: any) => {
     const { cx, cy, stroke, dataKey, value } = props;
 
-    const showDot = (value === data.lowestPoints.get(dataKey));
+    if (includeLowestPoints && (value === data.lowestPoints.get(dataKey))) {
+      return <circle cx={cx} cy={cy} fill={stroke} r="5" />;
+    }
 
-    return showDot ? (
-      <circle cx={cx} cy={cy} fill={stroke} r="3" />
-    ) : <></>;
+    if (includeHighestPoints && (value === data.highestPoints.get(dataKey))) {
+      return <circle cx={cx} cy={cy} fill={stroke} r="3" />;
+    }
+
+    //const showDot = (value === data.lowestPoints.get(dataKey));
+
+    return <></>;
   }
 
   const renderDollarSign = (label: string) => {
@@ -195,7 +210,13 @@ const Form: React.FC = () => {
               <Tooltip />
               <Legend />
               {lowestPoints.map((element: any, index: number) => {
-                return <Line key={'key'+index} type="monotone" dataKey={element[0]} stroke={strokeColors[index]} dot={includeLowestPoints ? renderDot : false}/>
+                return <Line 
+                          key={'key'+index} 
+                          type="monotone" 
+                          dataKey={element[0]} 
+                          stroke={strokeColors[index]} 
+                          dot={renderDot}
+                        />
               })}
 
             </LineChart>
@@ -203,7 +224,9 @@ const Form: React.FC = () => {
           <Checkbox label="Include pre-market" checked={includePreMarket} onChange={toggleIncludePreMarket}/>
           <Checkbox label="Include after-hours" checked={includeAfterHours} onChange={toggleIncludeAfterHours}/>
 
+          <br/><br/>
           <Checkbox label="Show lowest price of the day" checked={includeLowestPoints} onChange={toggleIncludeLowestPoints}/>
+          <Checkbox label="Show highest price of the day" checked={includeHighestPoints} onChange={toggleIncludeHighestPoints}/>
         </div>
       }
 

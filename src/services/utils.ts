@@ -71,6 +71,7 @@ export const processTradingHistory = async (data: []) => {
 
       const lineData = new Map();
       const lowestPoints = new Map();
+      const highestPoints = new Map();
 
       output.forEach((e: IPriceSnapshot) => {
         let parsedObject: IParsed = {};
@@ -87,6 +88,13 @@ export const processTradingHistory = async (data: []) => {
         } else if (+e.close < lowestPoints.get(date)) {
           lowestPoints.set(date, moneyRound(+e.close));
         }
+
+        // update "highest point" value
+        if (highestPoints.get(date) == null) {
+          highestPoints.set(date, moneyRound(+e.close));
+        } else if (+e.close > highestPoints.get(date)) {
+          highestPoints.set(date, moneyRound(+e.close));
+        }
       });
     
       // handle line data
@@ -100,6 +108,7 @@ export const processTradingHistory = async (data: []) => {
 
       const allData = {
         lowestPoints: lowestPoints,
+        highestPoints: highestPoints,
         lineData: sortedLineData,
       }
 

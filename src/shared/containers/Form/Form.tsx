@@ -93,6 +93,44 @@ const Form: React.FC = () => {
     setIncludeHighestPoints(prevProps => !prevProps);
   }
 
+
+  const formatTimestamp = (time: string) => {
+    // ex: 09:55:00 to 9:55am
+    // ex: 18:15:00 to 6:15pm
+    if (time) {
+      const [hour, minute] = time.split(':');
+
+      //determine if this is am or pm
+      let formattedSuffix = 'pm';
+      if (+hour <12 || +hour === 24) {
+        formattedSuffix = 'am';
+      }
+
+      // turn 24-hour time into 12, ex: "15:00:00" into "03:00"
+      let formattedHour = 0;
+      if (hour) {
+        formattedHour = +hour % 12 || 12;
+      }
+
+      return `${formattedHour}:${minute}${formattedSuffix}`;
+    } else {
+      return time;
+    }
+  }
+
+  const CustomTooltip = ( props: any ) => {
+    if (props.active && props.payload && props.payload.length) {
+      //  : ${props.payload[0].value}
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${formatTimestamp(props.label)}`}</p>
+        </div>
+      );
+    }
+  
+    return null;
+  };
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     console.log("Submitted form with this input: " + stockSymbol);
@@ -120,29 +158,6 @@ const Form: React.FC = () => {
     
   }
 
-  const formatTimestamp = (time: string) => {
-    // ex: 09:55:00 to 9:55am
-    // ex: 18:15:00 to 6:15pm
-    if (time) {
-      const [hour, minute] = time.split(':');
-
-      //determine if this is am or pm
-      let formattedSuffix = 'pm';
-      if (+hour <12 || +hour === 24) {
-        formattedSuffix = 'am';
-      }
-
-      // turn 24-hour time into 12, ex: "15:00:00" into "03:00"
-      let formattedHour = 0;
-      if (hour) {
-        formattedHour = +hour % 12 || 12;
-      }
-
-      return `${formattedHour}:${minute}${formattedSuffix}`;
-    } else {
-      return time;
-    }
-  }
 
   const renderDot = (props: any) => {
     const { cx, cy, stroke, dataKey, value } = props;
@@ -207,7 +222,7 @@ const Form: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="timestamp" tickFormatter={formatTimestamp} />
               <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10', 'dataMax + 15']}/>
-              <Tooltip />
+              <Tooltip content={ <CustomTooltip />}/>
               <Legend />
               {lowestPoints.map((element: any, index: number) => {
                 return <Line 

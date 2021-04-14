@@ -19,3 +19,8 @@ code {
 .no-left-margin {
   margin-left: 0px;
 }
+
+.custom-tooltip {
+  background-color:white;
+  padding:10px;
+}

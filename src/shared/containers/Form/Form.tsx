@@ -10,6 +10,7 @@ const Form: React.FC = () => {
   const [stockSymbol, setStockSymbol] = useState('GME');
   const [inputErr, setInputErr] = useState('');
   const [data, setData] = useState({} as any);
+  const [loading, setLoading] = useState(false);
   const [lowestPoints, setLowestPoints] = useState([] as any);
 
   const [includeLowestPoints, setIncludeLowestPoints] = useState(true);
@@ -92,7 +93,10 @@ const Form: React.FC = () => {
       setInputErr("Please input a stock symbol");
     } else {
       setInputErr("");
+
+      setLoading(true);
       let rawData = await getTradingData(stockSymbol);
+      setLoading(false);
 
       // format the data that came from the API call
       let processedData = await processTradingHistory(rawData);
@@ -104,7 +108,6 @@ const Form: React.FC = () => {
       console.log(lowestPointsArr);
       setLowestPoints(lowestPointsArr);
     }
-
     
   }
 
@@ -166,6 +169,10 @@ const Form: React.FC = () => {
           ))
           */}
       </form>
+
+      {loading && !data?.lineData && (
+        <div style={{height: 100 }}>LOADING...</div>
+      )}
 
       {data?.lineData?.length > 0 &&
         lowestPoints.length > 0 && 

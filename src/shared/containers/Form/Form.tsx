@@ -221,7 +221,7 @@ const Form: React.FC = () => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="timestamp" tickFormatter={formatTimestamp} />
-              <YAxis tickFormatter={renderDollarSign} domain={['dataMin - 10.00', 'dataMax + 15']}/>
+              <YAxis tickFormatter={renderDollarSign} domain={['dataMin', 'dataMax']}/>
               <Tooltip content={ <CustomTooltip />}/>
               <Legend />
               {lowestPoints.map((element: any, index: number) => {

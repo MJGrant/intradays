@@ -163,11 +163,11 @@ const Form: React.FC = () => {
     const { cx, cy, stroke, dataKey, value } = props;
 
     if (includeLowestPoints && (value === data.lowestPoints.get(dataKey))) {
-      return <circle cx={cx} cy={cy} fill={stroke} r="5" />;
+      return <rect x={cx-4} y={cy-4} width={8} height={8} fill={stroke} r="5" />;
     }
 
     if (includeHighestPoints && (value === data.highestPoints.get(dataKey))) {
-      return <circle cx={cx} cy={cy} fill={stroke} r="3" />;
+      return <circle cx={cx} cy={cy} fill={stroke} r="4" />;
     }
 
     //const showDot = (value === data.lowestPoints.get(dataKey));
